@@ -116,7 +116,7 @@ public class BattleShip {
      * @param horizontal The direction of the ship (horizontal or vertical).
      * @return true if the ship can be placed at the specified location, false otherwise.
      */
-    static boolean canPlaceShip(char[][] grid, int size,int row, int col,  boolean horizontal) {
+    static boolean canPlaceShip(char[][] grid, int row, int col, int size, boolean horizontal) {
         if (horizontal) {
             if (col + size > GRID_SIZE) return false;
             for (int i = 0; i < size; i++) {
@@ -132,21 +132,33 @@ public class BattleShip {
     }
 
     //If the canPlaceShips returns true the this function get called.
-    static void placeShip(char[][] grid, int size, int row, int col, boolean horizontal) {
-        // Check if placing horizontally will exceed the grid's boundaries
+    static void placeShip(char[][] grid,  int row, int col, int size,boolean horizontal) {
+               // Check if the ship can fit within grid boundaries
         if (horizontal) {
-            if (col + size > grid[0].length) {
+            if (col + size > GRID_SIZE) {
                 throw new IllegalArgumentException("Ship goes out of bounds horizontally.");
             }
+            // Check if the placement overlaps with another ship
+            for (int i = 0; i < size; i++) {
+                if (grid[row][col + i] != WATER) {
+                    throw new IllegalArgumentException("Ship placement overlaps with another ship.");
+                }
+            }
+            // Place the ship
             for (int i = 0; i < size; i++) {
                 grid[row][col + i] = SHIP;
             }
-        }
-        // Check if placing vertically will exceed the grid's boundaries
-        else {
-            if (row + size > grid.length) {
+        } else {
+            if (row + size > GRID_SIZE) {
                 throw new IllegalArgumentException("Ship goes out of bounds vertically.");
             }
+            // Check if the placement overlaps with another ship
+            for (int i = 0; i < size; i++) {
+                if (grid[row + i][col] != WATER) {
+                    throw new IllegalArgumentException("Ship placement overlaps with another ship.");
+                }
+            }
+            // Place the ship
             for (int i = 0; i < size; i++) {
                 grid[row + i][col] = SHIP;
             }
@@ -176,7 +188,7 @@ public class BattleShip {
             row = input.charAt(1) - '0' - 1;
 
 
-            if (opponentGrid[row][col] != WATER) {
+            if (trackingGrid[row][col] == HIT || trackingGrid[row][col] == MISS) {
                 System.out.println("You already attacked this spot... , Choose ANOTHER");
                 continue;
             }
