@@ -172,8 +172,9 @@ public class BattleShip {
             if (!isValidInput(input)) {
                 System.out.println("Please Enter a valid input ,(1-10, A-J)");
             }
-            row = input.charAt(0) - 'A';
-            col = input.charAt(1) - '0';
+            col = input.charAt(0) - 'A';
+            row = input.charAt(1) - '0' - 1;
+
 
             if (opponentGrid[row][col] != WATER) {
                 System.out.println("You already attacked this spot... , Choose ANOTHER");
