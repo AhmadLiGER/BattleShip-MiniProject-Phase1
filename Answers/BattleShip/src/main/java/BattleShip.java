@@ -51,15 +51,15 @@ public class BattleShip {
         // Main game loop, runs until one player's ships are all sunk
         while (!isGameOver()) {
             if (player1Turn) {
-                //System.out.println("Player 1's turn:");
-                //printGrid(player1TrackingGrid);
-                //playerTurn(player2Grid, player1TrackingGrid);
+                System.out.println("Player 1's turn:");
+                printGrid(player1TrackingGrid);
+                playerTurn(player2Grid, player1TrackingGrid);
             } else {
-                //System.out.println("Player 2's turn:");
-                //printGrid(player2TrackingGrid);
-                //playerTurn(player1Grid, player2TrackingGrid);
+                System.out.println("Player 2's turn:");
+                printGrid(player2TrackingGrid);
+                playerTurn(player1Grid, player2TrackingGrid);
             }
-            //player1Turn = !player1Turn;
+            player1Turn = !player1Turn;
         }
         System.out.println("Game Over!");
     }
@@ -116,7 +116,7 @@ public class BattleShip {
      * @param horizontal The direction of the ship (horizontal or vertical).
      * @return true if the ship can be placed at the specified location, false otherwise.
      */
-    static boolean canPlaceShip(char[][] grid, int row, int col, int size, boolean horizontal) {
+    static boolean canPlaceShip(char[][] grid, int size,int row, int col,  boolean horizontal) {
         if (horizontal) {
             if (col + size > GRID_SIZE) return false;
             for (int i = 0; i < size; i++) {
@@ -133,11 +133,20 @@ public class BattleShip {
 
     //If the canPlaceShips returns true the this function get called.
     static void placeShip(char[][] grid, int size, int row, int col, boolean horizontal) {
+        // Check if placing horizontally will exceed the grid's boundaries
         if (horizontal) {
+            if (col + size > grid[0].length) {
+                throw new IllegalArgumentException("Ship goes out of bounds horizontally.");
+            }
             for (int i = 0; i < size; i++) {
                 grid[row][col + i] = SHIP;
             }
-        } else {
+        }
+        // Check if placing vertically will exceed the grid's boundaries
+        else {
+            if (row + size > grid.length) {
+                throw new IllegalArgumentException("Ship goes out of bounds vertically.");
+            }
             for (int i = 0; i < size; i++) {
                 grid[row + i][col] = SHIP;
             }
@@ -238,7 +247,19 @@ public class BattleShip {
      *
      * @param grid The tracking grid to print.
      */
-    static void printGrid(char[][] grid) {
 
+    static void printGrid(char[][] grid) {
+        System.out.print("  ");
+        for (char c = 'A'; c < 'K'; c++) {
+           System.out.print(" "+ c);
+        }
+        System.out.println();
+        for (int i = 0; i < GRID_SIZE; i++) {
+            System.out.print((i+1) + (i < 9 ? "  " : " "));
+            for (int j = 0; j < GRID_SIZE; j++) {
+                System.out.print(grid[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
