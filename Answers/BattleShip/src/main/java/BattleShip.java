@@ -42,8 +42,8 @@ public class BattleShip {
         initializeGrid(player2TrackingGrid);
 
         // Place ships randomly on each player's grid
-        //placeShips(player1Grid);
-        //placeShips(player2Grid);
+        placeShips(player1Grid);
+        placeShips(player2Grid);
 
         // Variable to track whose turn it is
         boolean player1Turn = true;
@@ -61,7 +61,6 @@ public class BattleShip {
             }
             //player1Turn = !player1Turn;
         }
-
         System.out.println("Game Over!");
     }
 
@@ -72,7 +71,7 @@ public class BattleShip {
      */
     static void initializeGrid(char[][] grid) {
         for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < j; j++) {
+            for (int j = 0; j < i; j++) {
                 grid[i][j] = WATER;
             }
         }
@@ -84,8 +83,25 @@ public class BattleShip {
      *
      * @param grid The grid where ships need to be placed.
      */
-    static void placeShips(char[][] grid) {
 
+    static void placeShips(char[][] grid) {
+        int[] shipSize = {2, 3, 4, 5};
+        Random random = new Random();
+
+        for (int size : shipSize) {
+            boolean isTaken = false;
+
+            while (!isTaken) {
+                int row = random.nextInt(GRID_SIZE);
+                int col = random.nextInt(GRID_SIZE);
+                boolean horizontal = random.nextBoolean();
+
+                if (canPlaceShip(grid, row, col, size, horizontal)) {
+                    placeShip(grid, row, col, size, horizontal);
+                    isTaken = true;
+                }
+            }
+        }
     }
 
     /**
@@ -137,7 +153,37 @@ public class BattleShip {
      * @param trackingGrid The player's tracking grid to update.
      */
     static void playerTurn(char[][] opponentGrid, char[][] trackingGrid) {
+        Scanner sc = new Scanner(System.in);
+        String input;
+        int row, col;
 
+        while (true) {
+            System.out.print("Enter a position(e.g., B7): ");
+            input = sc.next().toUpperCase();
+            if (!isValidInput(input)) {
+                System.out.println("Please Enter a valid input ,(1-10, A-J)");
+            }
+            row = input.charAt(0) - 'A';
+            col = input.charAt(1) - '0';
+
+            if (opponentGrid[row][col] != WATER) {
+                System.out.println("You already attacked this spot... , Choose ANOTHER");
+                continue;
+            }
+            break;
+        }
+
+        if (opponentGrid[row][col] == WATER) {
+            System.out.println("You Missed \uD83E\uDD23");
+            opponentGrid[row][col] = MISS;
+            trackingGrid[row][col] = MISS;
+        }
+
+        if (opponentGrid[row][col] == SHIP) {
+            System.out.println("Hit!! \uD83D\uDD25");
+            opponentGrid[row][col] = HIT;
+            trackingGrid[row][col] = HIT;
+        }
     }
 
     /**
