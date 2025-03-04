@@ -101,21 +101,33 @@ public class BattleShip {
      * @return true if the ship can be placed at the specified location, false otherwise.
      */
     static boolean canPlaceShip(char[][] grid, int row, int col, int size, boolean horizontal) {
-        if(horizontal){
-            if (col+size > GRID_SIZE) return false;
+        if (horizontal) {
+            if (col + size > GRID_SIZE) return false;
             for (int i = 0; i < size; i++) {
-                if (grid[row][col+i] != WATER) return false;
+                if (grid[row][col + i] != WATER) return false;
             }
         } else {
-            if (row+size > GRID_SIZE) return false;
+            if (row + size > GRID_SIZE) return false;
             for (int i = 0; i < size; i++) {
-                if (grid[row+i][col] != WATER) return false;
+                if (grid[row + i][col] != WATER) return false;
             }
         }
         return true;
     }
 
-    static void placeShip (char[][] grid, int size, int row, int col, boolean horizontal){}
+    //If the canPlaceShips returns true the this function get called.
+    static void placeShip(char[][] grid, int size, int row, int col, boolean horizontal) {
+        if (horizontal) {
+            for (int i = 0; i < size; i++) {
+                grid[row][col + i] = SHIP;
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                grid[row + i][col] = SHIP;
+            }
+        }
+    }
+
 
     /**
      * Manages a player's turn, allowing them to attack the opponent's grid
