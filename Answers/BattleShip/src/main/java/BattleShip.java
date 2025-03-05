@@ -220,6 +220,7 @@ public class BattleShip {
         return false;
     }
 
+
     /**
      * Checks if all ships have been destroyed on a given grid.
      *
