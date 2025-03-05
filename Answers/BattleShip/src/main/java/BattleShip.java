@@ -227,12 +227,14 @@ public class BattleShip {
      * @return true if all ships are sunk, false otherwise.
      */
     static boolean allShipsSunk(char[][] grid) {
+        int sunkShips = 0;
+
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
-                if (grid[i][j] == SHIP) return false;
+                if (grid[i][j] == HIT) sunkShips++;
             }
         }
-        return true;
+        return sunkShips == 14;
     }
 
     /**
