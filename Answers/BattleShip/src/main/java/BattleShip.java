@@ -210,7 +210,14 @@ public class BattleShip {
      * @return true if the game is over (all ships are sunk), false otherwise.
      */
     static boolean isGameOver() {
-        return allShipsSunk(player1Grid) || allShipsSunk(player2Grid);
+        if (allShipsSunk(player1Grid)) {
+            System.out.println("Player 2 wins!");
+            return true;
+        } else if (allShipsSunk(player2Grid)) {
+            System.out.println("Player 1 wins!");
+            return true;
+        }
+        return false;
     }
 
     /**
