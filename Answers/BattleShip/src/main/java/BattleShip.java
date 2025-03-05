@@ -132,19 +132,16 @@ public class BattleShip {
     }
 
     //If the canPlaceShips returns true the this function get called.
-    static void placeShip(char[][] grid,  int row, int col, int size,boolean horizontal) {
-               // Check if the ship can fit within grid boundaries
+    static void placeShip(char[][] grid, int row, int col, int size, boolean horizontal) {
         if (horizontal) {
             if (col + size > GRID_SIZE) {
                 throw new IllegalArgumentException("Ship goes out of bounds horizontally.");
             }
-            // Check if the placement overlaps with another ship
             for (int i = 0; i < size; i++) {
                 if (grid[row][col + i] != WATER) {
                     throw new IllegalArgumentException("Ship placement overlaps with another ship.");
                 }
             }
-            // Place the ship
             for (int i = 0; i < size; i++) {
                 grid[row][col + i] = SHIP;
             }
@@ -152,13 +149,11 @@ public class BattleShip {
             if (row + size > GRID_SIZE) {
                 throw new IllegalArgumentException("Ship goes out of bounds vertically.");
             }
-            // Check if the placement overlaps with another ship
             for (int i = 0; i < size; i++) {
                 if (grid[row + i][col] != WATER) {
                     throw new IllegalArgumentException("Ship placement overlaps with another ship.");
                 }
             }
-            // Place the ship
             for (int i = 0; i < size; i++) {
                 grid[row + i][col] = SHIP;
             }
@@ -182,10 +177,11 @@ public class BattleShip {
             System.out.print("Enter a position(e.g., B7): ");
             input = sc.next().toUpperCase();
             if (!isValidInput(input)) {
-                System.out.println("Please Enter a valid input ,(1-10, A-J)");
+                System.out.println("Please Enter a valid input ,(0-9, A-J)");
+                continue;
             }
             col = input.charAt(0) - 'A';
-            row = input.charAt(1) - '0' - 1;
+            row = input.charAt(1) - '0';
 
 
             if (trackingGrid[row][col] == HIT || trackingGrid[row][col] == MISS) {
@@ -240,14 +236,14 @@ public class BattleShip {
      */
     static boolean isValidInput(String input) {
         input = input.trim();
-        if (input.length() < 2 || input.length() > 3) return false;
+        if (input.length() < 2) return false;
 
         char firstParam = input.charAt(0);
         if (firstParam < 'A' || firstParam > 'J') return false;
 
         try {
             int secondParam = Integer.parseInt(input.substring(1));
-            if (secondParam < 1 || secondParam > 10) return false;
+            if (secondParam < 0 || secondParam > 9) return false;
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -264,11 +260,11 @@ public class BattleShip {
     static void printGrid(char[][] grid) {
         System.out.print("  ");
         for (char c = 'A'; c < 'K'; c++) {
-           System.out.print(" "+ c);
+            System.out.print(" " + c);
         }
         System.out.println();
         for (int i = 0; i < GRID_SIZE; i++) {
-            System.out.print((i+1) + (i < 9 ? "  " : " "));
+            System.out.print((i) + "  ");
             for (int j = 0; j < GRID_SIZE; j++) {
                 System.out.print(grid[i][j] + " ");
             }
